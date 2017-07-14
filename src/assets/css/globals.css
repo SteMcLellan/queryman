@@ -1,0 +1,15 @@
+.box {
+  overflow: hidden;
+  box-shadow: 0 0 30px rgba(0,0,0,.1);
+  border: 1px solid #bebebe;
+  border-radius: 6px;
+}
+
+.toolbar-header .toolbar-actions .nav-actions {
+  max-width: 220px;
+  min-width: 167px;
+}
+
+.toolbar-header .toolbar-container {
+  display: inline-block;
+}
