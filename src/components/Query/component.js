@@ -19,14 +19,14 @@ const REMOVE_QUERY = reduxUtil.defineAction('REMOVE_QUERY');
 
 let nextQueryId = 0;
 
-let sendReceiveQueryResults = (id, queryProcessor, results, headers) => {
+let sendReceiveQueryResults = (id, queryProcessor, results, metrics) => {
     let resultString = JSON.stringify(results, null, 2);
     return actions.receiveQueryResults({
         id,
         isExecuting: false,
         queryProcessor: queryProcessor,
         results: results,
-        headers: headers,
+        metrics: metrics,
         resultString: resultString
     });
 };
@@ -43,7 +43,7 @@ const runQuery = ({id}) => {
         let queryProcessor = cxn.docdb.executeQuery(query.queryString);
         queryProcessor.getNextResultSet()
             .then((r) => {
-                dispatch(sendReceiveQueryResults(id, queryProcessor, r.results, r.headers));
+                dispatch(sendReceiveQueryResults(id, queryProcessor, r.results, r.metrics));
             });
     };
 };

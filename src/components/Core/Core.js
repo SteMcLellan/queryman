@@ -29,7 +29,6 @@ const AppRouter = () => {
   return (
     <Switch>
       <Route exact path="/" component={Home} />
-      {/*<Route path="/example" component={components.Example} />*/}
       <Route path="/connection/:cxnid" component={components.Connections} />
       <Route path="/query/:queryid" component={components.Query} />
     </Switch>
@@ -39,13 +38,8 @@ const AppRouter = () => {
 const Home = () => {
   return (
     <div>
-      <h1>Hello, Electron!</h1>
-      <p>I hope you enjoy using enhanced-electron-react-boilerplate to start your dev off right!</p>
-      <div className='padded'>
-        <div className={`box padded ${styles.box}`}>
-          This has a different background color, but uses the same 'box' className. However, thanks to CSS modules the names dont collide. Here we are setting a background color, and overriding the shadow.
-        </div>
-      </div>
+      <h1>Queryman</h1>
+      <p>Query documents from Cosmos DB!</p>
     </div>
   );
 }

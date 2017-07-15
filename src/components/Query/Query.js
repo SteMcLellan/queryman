@@ -7,6 +7,36 @@ import { actions } from './component.js';
 import styles from './component.less';
 import Highlight from './Highlight.js';
 
+const QueryProperties = ({metrics}) => {
+    return (
+        <div className={styles.queryProperties}>
+            <table className='table-striped'>
+                <caption>Query Properties</caption>
+                <thead>
+                    <tr>
+                        <th>
+                            Metric
+                        </th>
+                        <th>
+                            Value
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    { metrics.map((m, idx) => {
+                        return (
+                            <tr key={idx}>
+                                <td>{m.key}</td>
+                                <td>{m.value}</td>
+                            </tr>
+                        );
+                    })}
+                </tbody>
+            </table>
+        </div>
+    );
+}
+
 const QUERY_mapStateToProps = (state, ownProps) => {
     let myId = parseInt(ownProps.match.params.queryid);
     let myQuery = state.Query.queries.find(q => {
@@ -33,10 +63,15 @@ let Query = ({ query, executeQuery, executeNextPage }) => {
         <div className={styles.query}>
             <Form model={getModelPath} id='form-queryString' className=''>  
             <div className='pane-group'>
-                <div className='pane'>  
-                        <div className={styles.wrap}>           
+                <div className='pane'>
+                    <div className={styles.queryLeft} style={{height: 'calc(100% - 250px)'}}>
+                        <div className={styles.queryWrap}>           
                             <Control.textarea className={`form-control`} model='.queryString' id='queryString'/>
                         </div>
+                        <div className={styles.properties}>
+                            <QueryProperties metrics={query.metrics || []}/>
+                        </div>
+                    </div>
                 </div>
                 <div className='pane'>
                     <pre>
@@ -54,19 +89,3 @@ let Query = ({ query, executeQuery, executeNextPage }) => {
 Query = connect(QUERY_mapStateToProps, QUERY_mapDispatchToProps)(Query);
 
 export default Query;
-
-                    // {/*<Highlight className='json'>
-                    //     { query.resultString }
-                    // </Highlight>*/}
-                    // {   
-                    //     query.isExecuting &&
-                    //     <pre> <code>Executing Query...</code></pre>
-                    // }
-                    // {
-                    //     !query.isExecuting &&                    
-                    //     <pre>
-                    //         <code>
-                    //             { query.resultString }
-                    //         </code>
-                    //     </pre>
-                    // }

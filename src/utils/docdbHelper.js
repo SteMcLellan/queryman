@@ -94,27 +94,16 @@ class QueryResultSet {
     constructor(results, headers) {
         this.results = results;
         this.headers = headers;
+        
+        let tMetrics = [];
+        Object.keys(this.headers).map(p => {
+            if(p.startsWith('x-ms')) {
+                tMetrics.push({ key: p, value: headers[p]});
+            }
+        });
+
+        this.metrics = tMetrics;
     }
 }
-
-// let queryDocuments = (client, collectionLink, queryString, callback) => {
-//     let querySpec = {
-//         query: queryString
-//     };
-
-//     client.queryDocuments(collectionLink, querySpec).toArray(function (err, results) {
-//         if (err) {
-//             callback(err);
-//         } else {
-//             callback(null, results);
-//         }
-//     });
-// };
-
-// export {
-//     getOrCreateDatabase,
-//     getOrCreateCollection,
-//     queryDocuments
-// };
 
 export default DocumentDbHelper;
