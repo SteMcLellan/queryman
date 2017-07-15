@@ -34,7 +34,7 @@ let Toolbar = ({ query, executeQuery, executeNextPage }) => {
                 </button>
             </div>
 
-            <button className='btn btn-default pull-right' onClick={() => executeNextPage(query.id)}>
+            <button className='btn btn-default' onClick={() => executeNextPage(query.id)}>
                 <span className='icon icon-right-circled icon-text'></span>Next Page
             </button>
         </span>

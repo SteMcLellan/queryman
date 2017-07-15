@@ -2,20 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Prompt } from 'react-router-dom';
 import { push } from 'connected-react-router';
-import { Control, Form, actions as form_Actions } from 'react-redux-form';
-
+import { Control, Form } from 'react-redux-form';
+import { getConnectionStateFromProps } from './selectors.js'
 import { actions } from './component.js';
 import { actions as query_actions } from '../Query/component.js';
 
 const CXNSettings_mapStateToProps = (state, ownProps) => {
-  var myId = parseInt(ownProps.match.params.cxnid);
-  var myConnection = state.Connections.connections.find(cxn => {
-    return cxn.id == myId;
-  });
-
-  var ret = { ...myConnection };
   return {
-    cxn: ret
+    cxn: getConnectionStateFromProps(state, ownProps)
   };
 };
 

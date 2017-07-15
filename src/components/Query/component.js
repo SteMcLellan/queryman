@@ -3,9 +3,11 @@ import reduxHelper from '../../utils/reduxHelper.js';
 import DocumentDbHelper from '../../utils/docdbHelper.js'
 import { combineReducers } from 'redux';
 import { combineForms } from 'react-redux-form';
-
+import { getConnectionStateFromId } from '../Connections/selectors.js';
 import component from "./Query.js";
 import toolbar from './Toolbar.js';
+
+import { actions as cxn_actions } from '../Connections/component.js';
 
 const reduxUtil = reduxHelper('Query');
 
@@ -39,7 +41,7 @@ const runQuery = ({id}) => {
         dispatch(actions.runningQuery({id, isExecuting}));
 
         let query = state.Query.queries.find(q => q.id === id);
-        let cxn = state.Connections.connections.find(cxn => cxn.id === query.cxnid);
+        let cxn = getConnectionStateFromId(state, query.cxnid);
         let queryProcessor = cxn.docdb.executeQuery(query.queryString);
         queryProcessor.getNextResultSet()
             .then((r) => {
@@ -57,9 +59,25 @@ const nextPage = ({id}) => {
         let query = state.Query.queries.find(q => q.id === id);
         query.queryProcessor.getNextResultSet()
             .then((r) => {
-                dispatch(sendReceiveQueryResults(id, query.queryProcessor, r.results, r.headers));
+                dispatch(sendReceiveQueryResults(id, query.queryProcessor, r.results, r.metrics));
             });
     };
+};
+
+const connectAndAddConnection = ({cxnid}) => {
+    return (dispatch, getState) => {
+        let state = getState();
+
+        let cxn = state.Connections.connections.find(cxn => cxn.id === cxnid);
+        if (!cxn.docdb) {
+            return dispatch(cxn_actions.connect({id: cxnid}))
+                .then(() => {
+                    dispatch(actions.addQuery({cxnid}));
+                });
+        } else {
+            return dispatch(actions.addQuery({cxnid}));
+        }
+    }
 };
 
 const actions = {
@@ -73,6 +91,7 @@ const actions = {
             }
         };
     },
+    connectAndAddConnection: connectAndAddConnection,    
     nextPage: nextPage,
     runQuery: runQuery,
     runningQuery: reduxUtil.createAction(RUNNING_QUERY),

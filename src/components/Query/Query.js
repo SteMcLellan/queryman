@@ -5,7 +5,6 @@ import { Control, Form, actions as form_Actions } from 'react-redux-form';
 
 import { actions } from './component.js';
 import styles from './component.less';
-import Highlight from './Highlight.js';
 
 const QueryProperties = ({metrics}) => {
     return (

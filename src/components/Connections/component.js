@@ -57,7 +57,7 @@ const connect = ({id}) => {
 
         dispatch(actions.makeConnection({id, isConnecting: true}));
 
-        docdb.connectToDatabase()
+        return docdb.connectToDatabase()
             .then(docdb.connectToCollection.bind(docdb))
             .then(() => {
                 dispatch(actions.connected({id, docdb: docdb, isConnecting: false, connected: true}))
