@@ -82,7 +82,6 @@ class QueryProcessor {
                 if(err) {
                     reject(err);
                 } else {
-                    console.log(results[0].id);
                     resolve(new QueryResultSet(results, headers));
                 }
             });

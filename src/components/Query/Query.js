@@ -6,35 +6,7 @@ import { Control, Form, actions as form_Actions } from 'react-redux-form';
 import { actions } from './component.js';
 import styles from './component.less';
 
-const QueryProperties = ({metrics}) => {
-    return (
-        <div className={styles.queryProperties}>
-            <table className='table-striped'>
-                <caption>Query Properties</caption>
-                <thead>
-                    <tr>
-                        <th>
-                            Metric
-                        </th>
-                        <th>
-                            Value
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { metrics.map((m, idx) => {
-                        return (
-                            <tr key={idx}>
-                                <td>{m.key}</td>
-                                <td>{m.value}</td>
-                            </tr>
-                        );
-                    })}
-                </tbody>
-            </table>
-        </div>
-    );
-}
+import QueryMetrics from './QueryMetrics.js';
 
 const QUERY_mapStateToProps = (state, ownProps) => {
     let myId = parseInt(ownProps.match.params.queryid);
@@ -68,7 +40,7 @@ let Query = ({ query, executeQuery, executeNextPage }) => {
                             <Control.textarea className={`form-control`} model='.queryString' id='queryString'/>
                         </div>
                         <div className={styles.properties}>
-                            <QueryProperties metrics={query.metrics || []}/>
+                            <QueryMetrics metrics={query.metrics || []}/>
                         </div>
                     </div>
                 </div>
