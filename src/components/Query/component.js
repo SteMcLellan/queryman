@@ -8,6 +8,7 @@ import component from "./Query.js";
 import toolbar from './Toolbar.js';
 
 import { actions as cxn_actions } from '../Connections/component.js';
+import { actions as footer_actions } from '../Footer/component.js';
 
 const reduxUtil = reduxHelper('Query');
 
@@ -33,6 +34,10 @@ let sendReceiveQueryResults = (id, queryProcessor, results, metrics) => {
     });
 };
 
+const dispatchFooterMsg = (dispatch, msg) => {
+    dispatch(footer_actions.newFooterMsg({ newmsg: msg }));
+};
+
 const runQuery = ({id}) => {
     return (dispatch, getState) => {
         let isExecuting = true;
@@ -42,9 +47,12 @@ const runQuery = ({id}) => {
 
         let query = state.Query.queries.find(q => q.id === id);
         let cxn = getConnectionStateFromId(state, query.cxnid);
+
+        dispatchFooterMsg(dispatch, 'Executing query...');
         let queryProcessor = cxn.docdb.executeQuery(query.queryString);
         queryProcessor.getNextResultSet()
             .then((r) => {
+                dispatchFooterMsg(dispatch, 'Query execution completed.');
                 dispatch(sendReceiveQueryResults(id, queryProcessor, r.results, r.metrics));
             });
     };
@@ -55,10 +63,12 @@ const nextPage = ({id}) => {
         let state = getState();
 
         dispatch(actions.runningQuery({id, isExecuting: true}));
-
+        dispatchFooterMsg(dispatch, 'Executing query...');
         let query = state.Query.queries.find(q => q.id === id);
+
         query.queryProcessor.getNextResultSet()
             .then((r) => {
+                dispatchFooterMsg(dispatch, 'Query execution completed.');
                 dispatch(sendReceiveQueryResults(id, query.queryProcessor, r.results, r.metrics));
             });
     };
@@ -70,8 +80,10 @@ const connectAndAddConnection = ({cxnid}) => {
 
         let cxn = state.Connections.connections.find(cxn => cxn.id === cxnid);
         if (!cxn.docdb) {
+            dispatchFooterMsg(dispatch, `Connecting to ${cxn.friendlyName}...`);
             return dispatch(cxn_actions.connect({id: cxnid}))
                 .then(() => {
+                    dispatchFooterMsg(dispatch, 'Connected.');
                     dispatch(actions.addQuery({cxnid}));
                 });
         } else {

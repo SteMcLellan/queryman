@@ -13,3 +13,7 @@
 .toolbar-header .toolbar-container {
   display: inline-block;
 }
+
+.app-status-bar {
+  padding-left: 1em;
+}
