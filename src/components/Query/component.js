@@ -19,6 +19,7 @@ const RUN_QUERY = reduxUtil.defineAction('RUN_QUERY');
 const RUNNING_QUERY = reduxUtil.defineAction('RUNNING_QUERY');
 const RECEIVE_QUERY_RESULTS = reduxUtil.defineAction('RECEIVE_QUERY_RESULTS');
 const REMOVE_QUERY = reduxUtil.defineAction('REMOVE_QUERY');
+const QUERYSTRING_UPDATED = reduxUtil.defineAction('QUERYSTRING_UPDATED');
 
 let nextQueryId = 0;
 
@@ -105,6 +106,7 @@ const actions = {
     },
     connectAndAddConnection: connectAndAddConnection,    
     nextPage: nextPage,
+    queryStringUpdated: reduxUtil.createAction(QUERYSTRING_UPDATED),
     runQuery: runQuery,
     runningQuery: reduxUtil.createAction(RUNNING_QUERY),
     receiveQueryResults: reduxUtil.createAction(RECEIVE_QUERY_RESULTS),
@@ -118,7 +120,8 @@ const modifyQuery = (state, action) => {
 
 const queryReducer = reduxUtil.createReducer({
     [RUNNING_QUERY]: modifyQuery,
-    [RECEIVE_QUERY_RESULTS]: modifyQuery
+    [RECEIVE_QUERY_RESULTS]: modifyQuery,
+    [QUERYSTRING_UPDATED]: modifyQuery
 }, {});
 
 const addQuery = (state, action) => {

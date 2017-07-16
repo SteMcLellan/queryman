@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import highlightjs from 'highlight.js';
 import styles from './component.less';
 
+//TODO: this crappy impl of highlight.js really chokes on larger result sets (100ish JSON objects)
 class Highlight extends Component {
     constructor(props) {
         super(props);

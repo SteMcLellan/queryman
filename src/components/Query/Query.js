@@ -1,46 +1,46 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Prompt } from 'react-router-dom';
-import { Control, Form, actions as form_Actions } from 'react-redux-form';
-
 import { actions } from './component.js';
+
 import styles from './component.less';
+import { getQueryFromProps } from './selectors.js';
 
 import QueryMetrics from './QueryMetrics.js';
 import QueryResult from './QueryResult.js';
 import QueryEditor from './QueryEditor.js';
 
 const QUERY_mapStateToProps = (state, ownProps) => {
-    let myId = parseInt(ownProps.match.params.queryid);
-    let myQuery = state.Query.queries.find(q => {
-        return q.id === myId;
-    });
-
+    let query = getQueryFromProps(state, ownProps);
     return {
-        query: { ... myQuery }
+        query: query || {}
     };
 }
 
 const QUERY_mapDispatchToProps = (dispatch) => {
-    return { 
+    return {
+        updateQueryString: (id, newValue) => {
+            dispatch(actions.queryStringUpdated({id: id, queryString: newValue}));
+        }
     };
-}
+};
 
-let Query = ({ query, executeQuery, executeNextPage }) => {
+let Query = ({ query, executeQuery, executeNextPage, updateQueryString }) => {
     let getModelPath = (state) => {
         let idx = state.Query.queries.findIndex(q => q.id === query.id);
         return `Query.queries[${idx}]`;
     };
 
+    let onQueryStringChanged = (newVal) => {
+        updateQueryString(query.id, newVal);
+    }
+
     return (
         <div className={styles.query}>
-            {/*<Form model={getModelPath} id='form-queryString' className=''>  */}
             <div className='pane-group'>
                 <div className='pane'>
                     <div className={styles.queryLeft} style={{height: 'calc(100% - 250px)'}}>
                         <div className={styles.queryWrap}>       
-                            <QueryEditor query={query} />    
-                            {/*<Control.textarea className={`form-control`} model='.queryString' id='queryString'/>*/}
+                            <QueryEditor query={query} onChange={onQueryStringChanged} />    
                         </div>
                         <div className={styles.properties}>
                             <QueryMetrics metrics={query.metrics || []}/>
@@ -51,7 +51,6 @@ let Query = ({ query, executeQuery, executeNextPage }) => {
                     <QueryResult resultString={query.resultString}/>
                 </div>
             </div>
-            {/*</Form>*/}
         </div>       
     );
 };
