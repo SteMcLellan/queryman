@@ -17,7 +17,7 @@ const Menu_mapDispatchToProps = (dispatch) => {
 let queriesForCxn = (cxnid, queries) => {
   var filteredQueries = queries.filter(q => { return q.cxnid === cxnid });
   return filteredQueries.map(q => (
-      <MenuRow key={ `query-div: ${q.id}` } path={ `/query/${q.id}`} label={ `Query: ${q.id}` } icon="doc-text-inv" />
+      <MenuRow key={ `query-div: ${q.id}` } path={ `/query/${q.id}`} label={ `Query ${q.id}` } icon="doc-text-inv" />
     ));
 }
 
