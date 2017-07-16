@@ -15,7 +15,6 @@ const QueryMetrics = ({metrics}) => {
     return (
         <div className={styles.queryProperties}>
             <table className='table-striped'>
-                <caption>Query Properties</caption>
                 <thead>
                     <tr>
                         <th>

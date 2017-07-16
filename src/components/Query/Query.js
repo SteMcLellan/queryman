@@ -7,6 +7,8 @@ import { actions } from './component.js';
 import styles from './component.less';
 
 import QueryMetrics from './QueryMetrics.js';
+import QueryResult from './QueryResult.js';
+import QueryEditor from './QueryEditor.js';
 
 const QUERY_mapStateToProps = (state, ownProps) => {
     let myId = parseInt(ownProps.match.params.queryid);
@@ -32,12 +34,13 @@ let Query = ({ query, executeQuery, executeNextPage }) => {
 
     return (
         <div className={styles.query}>
-            <Form model={getModelPath} id='form-queryString' className=''>  
+            {/*<Form model={getModelPath} id='form-queryString' className=''>  */}
             <div className='pane-group'>
                 <div className='pane'>
                     <div className={styles.queryLeft} style={{height: 'calc(100% - 250px)'}}>
-                        <div className={styles.queryWrap}>           
-                            <Control.textarea className={`form-control`} model='.queryString' id='queryString'/>
+                        <div className={styles.queryWrap}>       
+                            <QueryEditor query={query} />    
+                            {/*<Control.textarea className={`form-control`} model='.queryString' id='queryString'/>*/}
                         </div>
                         <div className={styles.properties}>
                             <QueryMetrics metrics={query.metrics || []}/>
@@ -45,14 +48,10 @@ let Query = ({ query, executeQuery, executeNextPage }) => {
                     </div>
                 </div>
                 <div className='pane'>
-                    <pre>
-                        <code>
-                            { query.resultString }
-                        </code>
-                    </pre>
+                    <QueryResult resultString={query.resultString}/>
                 </div>
             </div>
-            </Form>
+            {/*</Form>*/}
         </div>       
     );
 };
