@@ -33,7 +33,7 @@ const PersistentBar = ({ btns }) => {
 
 const T_mapStateToProps = (state, ownProps) => {
     return {
-        router: {...state.router}
+        router: state.router
     };
 };
 
